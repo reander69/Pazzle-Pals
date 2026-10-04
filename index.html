@@ -3,13 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#fff8e8" />
+    <meta name="theme-color" content="#f3be59" />
     <title>Puzzle Pals — Animal Puzzle Adventure</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="style.css" />
-    <script src="game.js?v=5" defer></script>
+    <script src="game.js?v=17" defer></script>
   </head>
   <body>
     <div class="page-shell">
@@ -64,6 +64,17 @@
           </div>
 
           <aside class="side-panel">
+            <section class="preview-card" aria-labelledby="preview-title">
+              <div class="card-title-row">
+                <div class="card-icon preview-icon" aria-hidden="true">🖼️</div>
+                <div><p class="card-kicker">LOOK AHEAD</p><h2 id="preview-title">Puzzle preview</h2></div>
+              </div>
+              <div class="preview-frame" aria-live="polite">
+                <img id="preview-image" alt="" />
+              </div>
+              <p class="preview-caption">Picture clue</p>
+            </section>
+
             <section class="progress-card" aria-labelledby="progress-title">
               <div class="card-title-row">
                 <div class="card-icon progress-icon" aria-hidden="true">🏆</div>
@@ -102,7 +113,10 @@
               <h2 id="zoo-title">My little zoo <span aria-hidden="true">🏡</span></h2>
               <p class="zoo-subtitle">Solve all 10 puzzles to welcome every animal to your zoo!</p>
             </div>
-            <div class="zoo-count"><span aria-hidden="true">🐾</span> <span id="zoo-count">0</span> of 10 friends</div>
+            <div class="zoo-actions">
+              <div class="zoo-count"><span aria-hidden="true">🐾</span> <span id="zoo-count">0</span> of 10 friends</div>
+              <button class="reset-progress-button" id="reset-progress-button" type="button">Release all animals from the zoo</button>
+            </div>
           </div>
           <div class="zoo-grid" id="zoo-grid" aria-live="polite"></div>
         </section>
@@ -122,6 +136,19 @@
             <button class="next-button" id="next-button" type="button">Next level <span aria-hidden="true">🚀</span></button>
           </div>
         </div>
+      </div>
+      <div class="release-confirmation" id="release-confirmation" hidden>
+        <section class="release-dialog-card" role="dialog" aria-modal="true" aria-labelledby="release-title" aria-describedby="release-description" tabindex="-1">
+          <div class="release-animal" aria-hidden="true">🦁 🐼 🐢</div>
+          <p class="release-kicker">A BIG ZOO CHANGE</p>
+          <h2 id="release-title">Release all your animal friends?</h2>
+          <p class="release-description" id="release-description">Your zoo will be empty and your adventure will return to Level 1. This cannot be undone.</p>
+          <p class="release-error" id="release-error" role="alert" hidden></p>
+          <div class="release-actions">
+            <button class="keep-animals-button" id="keep-animals-button" type="button">Keep my animals</button>
+            <button class="confirm-release-button" id="confirm-release-button" type="button">Yes, release them</button>
+          </div>
+        </section>
       </div>
       <div class="sr-only" id="live-message" role="status" aria-live="polite"></div>
     </div>

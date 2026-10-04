@@ -1,19 +1,21 @@
 const animals = [
-  { name: "puppy", title: "Meet the puppy!", image: "animals/dog.svg", cheer: "Woof, woof! You solved the puppy puzzle!" },
-  { name: "kitten", title: "Meet the kitten!", image: "animals/cat.svg", cheer: "Meow! You solved the kitten puzzle!" },
-  { name: "lion cub", title: "Meet the lion cub!", image: "animals/lion.svg", cheer: "Roar! You solved the lion cub puzzle!" },
-  { name: "bunny", title: "Meet the bunny!", image: "animals/bunny.svg", cheer: "Hop, hop! You solved the bunny puzzle!" },
-  { name: "elephant", title: "Meet the elephant!", image: "animals/elephant.svg", cheer: "Toot, toot! You solved the elephant puzzle!" },
-  { name: "little fox", title: "Meet the little fox!", image: "animals/fox.svg", cheer: "Fantastic! You solved the little fox puzzle!" },
-  { name: "penguin", title: "Meet the penguin!", image: "animals/penguin.svg", cheer: "Waddle, waddle! You solved the penguin puzzle!" },
-  { name: "panda", title: "Meet the panda!", image: "animals/panda.svg", cheer: "Hooray! You solved the panda puzzle!" },
-  { name: "giraffe", title: "Meet the giraffe!", image: "animals/giraffe.svg", cheer: "Tall cheers! You solved the giraffe puzzle!" },
-  { name: "turtle", title: "Meet the turtle!", image: "animals/turtle.svg", cheer: "Slow and steady! You solved the turtle puzzle!" }
+  { name: "puppy", title: "Meet the puppy!", image: "animal/puppy.svg", cheer: "Woof, woof! You solved the puppy puzzle!" },
+  { name: "kitten", title: "Meet the kitten!", image: "animal/kitten.svg", cheer: "Meow! You solved the kitten puzzle!" },
+  { name: "lion cub", title: "Meet the lion cub!", image: "animal/lion-cub.svg", cheer: "Roar! You solved the lion cub puzzle!" },
+  { name: "bunny", title: "Meet the bunny!", image: "animal/bunny.svg", cheer: "Hop, hop! You solved the bunny puzzle!" },
+  { name: "elephant", title: "Meet the elephant!", image: "animal/elephant.svg", cheer: "Toot, toot! You solved the elephant puzzle!" },
+  { name: "little fox", title: "Meet the little fox!", image: "animal/fox.svg", cheer: "Fantastic! You solved the little fox puzzle!" },
+  { name: "penguin", title: "Meet the penguin!", image: "animal/penguin.svg", cheer: "Waddle, waddle! You solved the penguin puzzle!" },
+  { name: "panda", title: "Meet the panda!", image: "animal/panda.svg", cheer: "Hooray! You solved the panda puzzle!" },
+  { name: "giraffe", title: "Meet the giraffe!", image: "animal/giraffe.svg", cheer: "Tall cheers! You solved the giraffe puzzle!" },
+  { name: "turtle", title: "Meet the turtle!", image: "animal/turtle.svg", cheer: "Slow and steady! You solved the turtle puzzle!" }
 ];
 
 const totalLevels = 10;
 const celebration = document.querySelector("#celebration");
+const releaseConfirmation = document.querySelector("#release-confirmation");
 const board = document.querySelector("#puzzle-board");
+const previewImage = document.querySelector("#preview-image");
 const liveMessage = document.querySelector("#live-message");
 const soundToggle = document.querySelector("#sound-toggle");
 const levelDots = document.querySelector("#level-dots");
@@ -64,13 +66,14 @@ function saveCollection() {
   }
 }
 
-function renderZoo() {
+function renderZoo(newFriendName = null) {
   const zooGrid = document.querySelector("#zoo-grid");
   zooGrid.replaceChildren();
   animals.forEach((animal) => {
     const isCollected = collectedAnimals.has(animal.name);
     const habitat = document.createElement("article");
     habitat.className = `zoo-habitat${isCollected ? " is-home" : " is-mystery"}`;
+    if (animal.name === newFriendName) habitat.classList.add("is-new-friend");
 
     const scene = document.createElement("div");
     scene.className = "habitat-scene";
@@ -110,13 +113,13 @@ function welcomeAnimalToZoo(animalName) {
   if (isNewFriend) {
     collectedAnimals.add(animalName);
     saveCollection();
-    renderZoo();
+    renderZoo(animalName);
   }
   return isNewFriend;
 }
 
 function gridSizeForLevel(currentLevel) {
-  return Math.min(currentLevel + 1, totalLevels + 1);
+  return currentLevel === 1 ? 2 : Math.floor(currentLevel / 2) + 2;
 }
 
 function currentAnimal() {
@@ -158,6 +161,15 @@ function updateProgress(adventureComplete = false) {
   renderLevelDots();
 }
 
+function tileVisualStyle(piece, pieceCount) {
+  const hue = piece * 360 / pieceCount;
+  return {
+    borderColor: "rgba(255, 255, 255, .95)",
+    boxShadow: `inset 0 0 0 1px hsl(${hue} 78% 42%)`,
+    hue
+  };
+}
+
 function renderBoard() {
   const animal = currentAnimal();
   const size = gridSizeForLevel(level);
@@ -166,6 +178,8 @@ function renderBoard() {
   moves = 0;
   completed = false;
 
+  previewImage.src = animal.image;
+  previewImage.alt = `${animal.name} puzzle preview`;
   document.querySelector("#animal-title").textContent = animal.title;
   document.querySelector("#move-count").textContent = "0";
   document.querySelector("#game-hint").textContent = `Tap two pieces to swap them into place. ${size} × ${size} puzzle`;
@@ -175,6 +189,7 @@ function renderBoard() {
 
   pieces.forEach((piece, position) => {
     const tile = document.createElement("button");
+    const style = tileVisualStyle(piece, pieces.length);
     tile.type = "button";
     tile.className = "puzzle-piece";
     tile.dataset.position = String(position);
@@ -182,6 +197,11 @@ function renderBoard() {
     tile.setAttribute("aria-label", pieceLabel(piece, size, animal.name));
     tile.style.backgroundImage = `url("${animal.image}")`;
     tile.style.backgroundSize = `${size * 100}% ${size * 100}%`;
+    tile.style.backgroundRepeat = "no-repeat";
+    tile.style.backgroundColor = "#fffdf9";
+    tile.style.borderColor = style.borderColor;
+    tile.style.boxShadow = style.boxShadow;
+    tile.style.setProperty("--piece-hue", String(style.hue));
     const row = Math.floor(piece / size);
     const column = piece % size;
     const offsetX = size === 1 ? 0 : column / (size - 1) * 100;
@@ -254,6 +274,10 @@ function refreshPieceElements() {
     const column = piece % size;
     tile.style.backgroundPosition = `${column / (size - 1) * 100}% ${row / (size - 1) * 100}%`;
     tile.setAttribute("aria-label", pieceLabel(piece, size, animal.name));
+    const style = tileVisualStyle(piece, pieces.length);
+    tile.style.borderColor = style.borderColor;
+    tile.style.boxShadow = style.boxShadow;
+    tile.style.setProperty("--piece-hue", String(style.hue));
     tile.classList.toggle("is-selected", position === selectedPosition);
     tile.classList.toggle("is-correct", piece === position);
   });
@@ -323,6 +347,51 @@ document.querySelector("#shuffle-button").addEventListener("click", () => {
   liveMessage.textContent = "The puzzle pieces have been mixed up.";
 });
 
+const releaseAnimalsButton = document.querySelector("#reset-progress-button");
+const confirmReleaseButton = document.querySelector("#confirm-release-button");
+const keepAnimalsButton = document.querySelector("#keep-animals-button");
+const releaseError = document.querySelector("#release-error");
+
+releaseAnimalsButton.addEventListener("click", () => {
+  releaseError.hidden = true;
+  releaseConfirmation.hidden = false;
+  keepAnimalsButton.focus();
+});
+
+function closeReleaseConfirmation() {
+  releaseConfirmation.hidden = true;
+  releaseError.hidden = true;
+  releaseAnimalsButton.focus();
+}
+
+keepAnimalsButton.addEventListener("click", closeReleaseConfirmation);
+
+releaseConfirmation.addEventListener("click", (event) => {
+  if (event.target === releaseConfirmation) closeReleaseConfirmation();
+});
+
+confirmReleaseButton.addEventListener("click", () => {
+  try {
+    localStorage.removeItem("puzzlePalsLevel");
+    localStorage.removeItem("puzzlePalsZoo");
+  } catch (error) {
+    console.error("Could not reset saved puzzle progress.", error);
+    releaseError.textContent = "We couldn't release your animal friends just now. Check your browser storage settings and try again.";
+    releaseError.hidden = false;
+    confirmReleaseButton.focus();
+    return;
+  }
+
+  level = 1;
+  collectedAnimals.clear();
+  celebration.hidden = true;
+  releaseConfirmation.hidden = true;
+  renderBoard();
+  renderZoo();
+  liveMessage.textContent = "All animals have been released from your zoo. Your adventure is back at Level 1.";
+  releaseAnimalsButton.focus();
+});
+
 document.querySelector("#play-again-button").addEventListener("click", () => {
   celebration.hidden = true;
   renderBoard();
@@ -345,6 +414,23 @@ celebration.addEventListener("click", (event) => {
 });
 
 document.addEventListener("keydown", (event) => {
+  if (!releaseConfirmation.hidden && event.key === "Escape") {
+    closeReleaseConfirmation();
+    return;
+  }
+  if (!releaseConfirmation.hidden && event.key === "Tab") {
+    const focusableControls = [keepAnimalsButton, confirmReleaseButton];
+    const firstControl = focusableControls[0];
+    const lastControl = focusableControls[focusableControls.length - 1];
+    if (event.shiftKey && document.activeElement === firstControl) {
+      event.preventDefault();
+      lastControl.focus();
+    } else if (!event.shiftKey && document.activeElement === lastControl) {
+      event.preventDefault();
+      firstControl.focus();
+    }
+    return;
+  }
   if (event.key === "Escape" && !celebration.hidden) {
     celebration.hidden = true;
     renderBoard();
