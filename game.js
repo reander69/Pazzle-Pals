@@ -4,9 +4,14 @@ const animals = [
   { name: "lion cub", title: "Meet the lion cub!", image: "animals/lion.svg", cheer: "Roar! You solved the lion cub puzzle!" },
   { name: "bunny", title: "Meet the bunny!", image: "animals/bunny.svg", cheer: "Hop, hop! You solved the bunny puzzle!" },
   { name: "elephant", title: "Meet the elephant!", image: "animals/elephant.svg", cheer: "Toot, toot! You solved the elephant puzzle!" },
-  { name: "little fox", title: "Meet the little fox!", image: "animals/fox.svg", cheer: "Fantastic! You solved the little fox puzzle!" }
+  { name: "little fox", title: "Meet the little fox!", image: "animals/fox.svg", cheer: "Fantastic! You solved the little fox puzzle!" },
+  { name: "penguin", title: "Meet the penguin!", image: "animals/penguin.svg", cheer: "Waddle, waddle! You solved the penguin puzzle!" },
+  { name: "panda", title: "Meet the panda!", image: "animals/panda.svg", cheer: "Hooray! You solved the panda puzzle!" },
+  { name: "giraffe", title: "Meet the giraffe!", image: "animals/giraffe.svg", cheer: "Tall cheers! You solved the giraffe puzzle!" },
+  { name: "turtle", title: "Meet the turtle!", image: "animals/turtle.svg", cheer: "Slow and steady! You solved the turtle puzzle!" }
 ];
 
+const totalLevels = 10;
 const celebration = document.querySelector("#celebration");
 const board = document.querySelector("#puzzle-board");
 const liveMessage = document.querySelector("#live-message");
@@ -24,7 +29,7 @@ let completed = false;
 function loadLevel() {
   try {
     const savedLevel = Number.parseInt(localStorage.getItem("puzzlePalsLevel") || "1", 10);
-    return Number.isFinite(savedLevel) && savedLevel > 0 ? savedLevel : 1;
+    return Number.isFinite(savedLevel) && savedLevel > 0 ? Math.min(savedLevel, totalLevels) : 1;
   } catch (error) {
     console.warn("Could not read saved puzzle progress.", error);
     return 1;
@@ -111,10 +116,7 @@ function welcomeAnimalToZoo(animalName) {
 }
 
 function gridSizeForLevel(currentLevel) {
-  if (currentLevel === 1) return 2;
-  if (currentLevel <= 3) return 3;
-  if (currentLevel <= 5) return 4;
-  return Math.min(5 + Math.floor((currentLevel - 6) / 4), 7);
+  return Math.min(currentLevel + 1, totalLevels + 1);
 }
 
 function currentAnimal() {
@@ -135,9 +137,7 @@ function shuffledPieces(count) {
 
 function renderLevelDots() {
   levelDots.replaceChildren();
-  const firstLevel = Math.floor((level - 1) / 6) * 6 + 1;
-  for (let step = 0; step < 6; step += 1) {
-    const dotLevel = firstLevel + step;
+  for (let dotLevel = 1; dotLevel <= totalLevels; dotLevel += 1) {
     const dot = document.createElement("span");
     dot.className = "level-dot";
     dot.textContent = String(dotLevel);
@@ -148,11 +148,11 @@ function renderLevelDots() {
   }
 }
 
-function updateProgress() {
+function updateProgress(adventureComplete = false) {
   document.querySelector("#level-number").textContent = String(level);
   document.querySelector("#progress-level").textContent = String(level);
-  const percent = Math.round(((level - 1) % 6) / 5 * 100);
-  document.querySelector("#progress-percent").textContent = `${percent}% to next badge`;
+  const percent = adventureComplete ? 100 : Math.round((level - 1) / totalLevels * 100);
+  document.querySelector("#progress-percent").textContent = `${percent}% complete`;
   document.querySelector("#progress-fill").style.width = `${percent}%`;
   document.querySelector("#progress-track").setAttribute("aria-valuenow", String(percent));
   renderLevelDots();
@@ -268,8 +268,11 @@ function finishPuzzle() {
   celebrationImage.style.backgroundImage = `url("${animal.image}")`;
   celebrationImage.setAttribute("aria-label", animal.name);
   const zooMessage = isNewFriend ? ` ${animal.name} is now home in your zoo!` : ` ${animal.name} is happy to visit your zoo again!`;
-  document.querySelector("#celebration-message").textContent = `${animal.cheer} You put all the pieces together in ${moves} ${moves === 1 ? "swap" : "swaps"}.${zooMessage}`;
+  const adventureMessage = level === totalLevels ? " You completed all 10 levels!" : "";
+  document.querySelector("#celebration-message").textContent = `${animal.cheer} You put all the pieces together in ${moves} ${moves === 1 ? "swap" : "swaps"}.${zooMessage}${adventureMessage}`;
   document.querySelector("#play-again-button").textContent = "Play again 🔁";
+  document.querySelector("#next-button").textContent = level === totalLevels ? "Start again 🏆" : "Next level 🚀";
+  if (level === totalLevels) updateProgress(true);
   celebration.hidden = false;
   document.querySelector("#play-again-button").focus();
   liveMessage.textContent = `${animal.cheer} Puzzle complete in ${moves} swaps.`;
@@ -328,7 +331,7 @@ document.querySelector("#play-again-button").addEventListener("click", () => {
 
 document.querySelector("#next-button").addEventListener("click", () => {
   celebration.hidden = true;
-  level += 1;
+  level = level === totalLevels ? 1 : level + 1;
   saveLevel();
   renderBoard();
   document.querySelector("#puzzle-board").querySelector("button")?.focus();

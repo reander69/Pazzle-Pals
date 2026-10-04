@@ -1,6 +1,6 @@
 # Puzzle Pals
 
-A kid-friendly animal picture puzzle game. Solve puzzles to welcome puppy, kitten, lion cub, bunny, elephant, and fox friends into your personal zoo.
+A kid-friendly animal picture puzzle game with ten levels and ten animals: puppy, kitten, lion cub, bunny, elephant, fox, penguin, panda, giraffe, and turtle. Puzzle sizes grow by one row and column per level, from 2×2 at level 1 to 11×11 at level 10, and each solved animal joins your personal zoo.
 
 ## Play locally
 

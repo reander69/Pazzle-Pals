@@ -83,8 +83,8 @@ h1 span { color: var(--coral); }
 .progress-label span:last-child { color: #abb0bd; font-size: 10px; }
 .progress-track { height: 10px; overflow: hidden; border-radius: 99px; background: #f5f1e9; }
 .progress-track span { display: block; width: 0; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #ffb781, #ff8671); transition: width .45s ease; }
-.level-dots { display: flex; justify-content: space-between; margin-top: 14px; }
-.level-dot { display: grid; width: 24px; height: 24px; place-items: center; border-radius: 50%; background: #f4f2ed; color: #b7b8bc; font-size: 10px; font-weight: 900; }
+.level-dots { display: flex; justify-content: space-between; gap: 4px; margin-top: 14px; }
+.level-dot { display: grid; width: 20px; height: 20px; place-items: center; border-radius: 50%; background: #f4f2ed; color: #b7b8bc; font-size: 9px; font-weight: 900; }
 .level-dot.is-done { background: #dcf4e6; color: #4c9b71; }
 .level-dot.is-current { background: #ffedb5; color: #a27a1c; box-shadow: 0 0 0 3px #fff8e4; }
 .how-card { padding-bottom: 17px; }
@@ -102,7 +102,7 @@ h1 span { color: var(--coral); }
 .zoo-heading h2 { margin-bottom: 4px; font-size: 24px; font-weight: 900; letter-spacing: -.6px; }
 .zoo-subtitle { margin: 0; color: var(--muted); font-size: 13px; font-weight: 700; }
 .zoo-count { display: flex; align-items: center; gap: 6px; padding: 9px 12px; border-radius: 13px; background: #e8f5e5; color: #56825d; font-size: 12px; font-weight: 900; white-space: nowrap; }
-.zoo-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 13px; }
+.zoo-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 13px; }
 .zoo-habitat { min-width: 0; overflow: hidden; border: 1px solid #e9e4d5; border-radius: 17px; background: #fff; box-shadow: 0 4px 0 rgba(198, 211, 185, .33); }
 .habitat-scene { position: relative; display: grid; height: 124px; overflow: hidden; place-items: center; background: linear-gradient(180deg, #dff5ed 0%, #eaf8e5 70%, #bde5bd 70%, #bde5bd 100%); }
 .habitat-scene::before { position: absolute; right: -12px; bottom: 23px; left: -12px; height: 18px; border-top: 5px solid rgba(255, 255, 255, .9); border-bottom: 5px solid rgba(255, 255, 255, .9); content: ""; }
