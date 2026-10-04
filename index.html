@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#fff8e8" />
+    <title>Puzzle Pals — Animal Puzzle Adventure</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="game.js?v=3" defer></script>
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="topbar">
+        <a class="brand" href="#" aria-label="Puzzle Pals home">
+          <span class="brand-icon" aria-hidden="true">🧩</span>
+          <span>Puzzle<span class="brand-accent">Pals</span></span>
+        </a>
+        <div class="topbar-right">
+          <span class="sticker" aria-hidden="true">✦ Play & learn! ✦</span>
+          <a class="zoo-link" href="#my-zoo"><span aria-hidden="true">🦒</span> My Zoo <span class="zoo-link-count" id="zoo-link-count">0</span></a>
+          <button class="sound-toggle" id="sound-toggle" type="button" aria-pressed="true">
+            <span id="sound-icon" aria-hidden="true">🔊</span>
+            <span id="sound-label">Sound on</span>
+          </button>
+        </div>
+      </header>
+
+      <main>
+        <section class="welcome" aria-labelledby="welcome-title">
+          <div class="welcome-copy">
+            <p class="eyebrow"><span aria-hidden="true">🐾</span> YOUR LITTLE ANIMAL ADVENTURE</p>
+            <h1 id="welcome-title">Ready, set, <span>puzzle!</span></h1>
+            <p class="welcome-subtitle">Put the picture together and meet a new furry friend.</p>
+          </div>
+          <div class="welcome-doodle" aria-hidden="true">
+            <span class="doodle-sun">☀️</span><span class="doodle-flower">🌼</span>
+          </div>
+        </section>
+
+        <section class="game-layout" aria-label="Animal puzzle game">
+          <div class="play-card">
+            <div class="game-heading">
+              <div>
+                <p class="eyebrow level-eyebrow">PUZZLE TIME</p>
+                <h2 id="animal-title">Meet the puppy!</h2>
+                <p class="game-hint" id="game-hint">Tap two pieces to swap them into place.</p>
+              </div>
+              <div class="level-pill"><span aria-hidden="true">⭐</span> Level <span id="level-number">1</span></div>
+            </div>
+
+            <div class="puzzle-wrap">
+              <div class="puzzle-board" id="puzzle-board" role="group" aria-label="Shuffled animal puzzle"></div>
+              <div class="board-corner corner-top" aria-hidden="true">✦</div>
+              <div class="board-corner corner-bottom" aria-hidden="true">✿</div>
+            </div>
+
+            <div class="game-footer">
+              <p class="move-counter"><span aria-hidden="true">🌀</span> Swaps <strong id="move-count">0</strong></p>
+              <button class="shuffle-button" id="shuffle-button" type="button"><span aria-hidden="true">🔄</span> Mix it up</button>
+            </div>
+          </div>
+
+          <aside class="side-panel">
+            <section class="progress-card" aria-labelledby="progress-title">
+              <div class="card-title-row">
+                <div class="card-icon progress-icon" aria-hidden="true">🏆</div>
+                <div><p class="card-kicker">YOU'RE DOING GREAT</p><h2 id="progress-title">My adventure</h2></div>
+              </div>
+              <div class="progress-label"><span>Level <span id="progress-level">1</span></span><span id="progress-percent">0% complete</span></div>
+              <div class="progress-track" role="progressbar" aria-label="Adventure progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progress-track">
+                <span id="progress-fill"></span>
+              </div>
+              <div class="level-dots" id="level-dots" aria-label="Completed levels"></div>
+            </section>
+
+            <section class="how-card" aria-labelledby="how-title">
+              <div class="card-title-row">
+                <div class="card-icon how-icon" aria-hidden="true">💡</div>
+                <div><p class="card-kicker">A LITTLE HINT</p><h2 id="how-title">How to play</h2></div>
+              </div>
+              <ol class="how-list">
+                <li><span>1</span> Pick a puzzle piece.</li>
+                <li><span>2</span> Pick where it should go.</li>
+                <li><span>3</span> Cheer when you meet your pal!</li>
+              </ol>
+            </section>
+
+            <div class="buddy-note">
+              <span class="buddy-emoji" aria-hidden="true">🐥</span>
+              <p>Every puzzle is a new friend. <strong>You've got this!</strong></p>
+            </div>
+          </aside>
+        </section>
+
+        <section class="zoo-section" id="my-zoo" aria-labelledby="zoo-title">
+          <div class="zoo-heading">
+            <div>
+              <p class="eyebrow"><span aria-hidden="true">🌿</span> YOUR ANIMAL COLLECTION</p>
+              <h2 id="zoo-title">My little zoo <span aria-hidden="true">🏡</span></h2>
+              <p class="zoo-subtitle">Solve a puzzle to welcome its animal to your zoo!</p>
+            </div>
+            <div class="zoo-count"><span aria-hidden="true">🐾</span> <span id="zoo-count">0</span> of 6 friends</div>
+          </div>
+          <div class="zoo-grid" id="zoo-grid" aria-live="polite"></div>
+        </section>
+
+        <footer class="page-footer"><span aria-hidden="true">🌈</span> Made for curious little minds <span aria-hidden="true">💛</span></footer>
+      </main>
+
+      <div class="celebration" id="celebration" hidden>
+        <div class="celebration-card" role="dialog" aria-modal="true" aria-labelledby="celebration-title">
+          <div class="confetti" aria-hidden="true">🎉 ✨ 🎊</div>
+          <div class="celebration-animal" id="celebration-animal" aria-hidden="true"></div>
+          <p class="celebration-kicker">YOU DID IT!</p>
+          <h2 id="celebration-title">Amazing puzzling!</h2>
+          <p class="celebration-message" id="celebration-message"></p>
+          <div class="celebration-actions">
+            <button class="play-again-button" id="play-again-button" type="button">Play again <span aria-hidden="true">🔁</span></button>
+            <button class="next-button" id="next-button" type="button">Next level <span aria-hidden="true">🚀</span></button>
+          </div>
+        </div>
+      </div>
+      <div class="sr-only" id="live-message" role="status" aria-live="polite"></div>
+    </div>
+  </body>
+</html>
